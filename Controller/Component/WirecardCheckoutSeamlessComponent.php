@@ -32,6 +32,7 @@ class WirecardCheckoutSeamlessComponent extends Component
      * @param string $language Language for returned texts and error messages.
      *                         Alphabetic with a fixed length of 2.
      * @return Api\DataStorageInitResponse
+     * @throws WirecardRequestException when the response contains errors.
      */
     public function InitDataStorage($orderIdent, $language)
     {

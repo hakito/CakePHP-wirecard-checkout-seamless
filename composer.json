@@ -1,0 +1,22 @@
+{
+    "name": "hakito/cakephp-wirecard-checkout-seamless-plugin",
+    "type": "cakephp-plugin",
+    "description": "CakePhp Plugin for Wirecard Checkout Seamless payments",
+    "homepage": "https://github.com/hakito/CakePHP-wirecard-checkout-seamless",
+    "keywords": ["wirecard", "checkout", "seamless", "cakephp"],
+    "license": "GPL-2.0",
+    "authors": [
+        {
+            "name": "Gerd Katzenbeisser",
+            "homepage": "https://github.com/hakito/CakePHP-wirecard-checkout-seamless/graphs/contributors"
+        }
+    ],
+    "require": {
+        "php": ">=5.3.0",
+        "hakito/wirecard-checkout-seamless": "dev-master",
+        "composer/installers": "*"
+    },
+    "extra": {
+        "installer-name": "WirecardCheckoutSeamless"
+    }
+}

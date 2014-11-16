@@ -45,7 +45,33 @@ class WirecardCheckoutSeamlessComponentTest extends CakeTestCase
         $this->assertEquals($this->Controller, $this->t->Controller);
     }
 
-    public function testInitDataStorage()
+    public function testInitDataStorageCallsSetters()
+    {
+        $expected = array(
+            'customerId' => 'a',
+            'shopId' => 'b',
+            'javascriptScriptVersion' => 'c',
+            'orderIdent' => 'd',
+            'returnUrl' => 'http://localhost/eps_bank_transfer/CorsFallback.php',
+            'language' => 'f'
+        );
+
+        Configure::write('WirecardCheckoutSeamless', array_merge($expected,
+                array('secret' => 's')));
+
+        foreach ($expected as $key => $val)
+        {
+            $pascalCase = strtoupper(substr($key,0,1)) . substr($key, 1);
+            $method = 'Set' . $pascalCase;
+            $this->mDatastorageInitRequest->expects($this->once())
+                    ->method($method)
+                    ->with($val);
+        }
+
+        $this->t->InitDataStorage($expected['orderIdent'], $expected['language']);
+    }
+
+    public function testInitDataStorageCallsSend()
     {
         $config = Configure::read('WirecardCheckoutSeamless');
         $this->mDatastorageInitRequest->expects($this->once())
@@ -53,5 +79,7 @@ class WirecardCheckoutSeamlessComponentTest extends CakeTestCase
                 ->with($config['secret']);
         $this->t->InitDataStorage('a', 'b');
     }
+
+
 
 }

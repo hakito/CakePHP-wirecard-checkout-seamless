@@ -47,7 +47,20 @@ class WirecardCheckoutSeamlessComponent extends Component
         if (!empty($config['javascriptScriptVersion']))
             $this->dataStorageInitRequest->SetJavascriptScriptVersion($config['javascriptScriptVersion']);
 
-        return $this->dataStorageInitRequest->Send($config['secret']);
+        $response = $this->dataStorageInitRequest->Send($config['secret']);
+        if ($response->GetErrors() > 0)
+        {
+            $exception = new WirecardRequestException('Error during datastorage init.');
+            $exception->response = $response;
+            throw $exception;
+        }
+        return $response;
     }
+
+}
+
+class WirecardRequestException extends Exception {
+    /** @var Api\Response */
+    public $response;
 
 }

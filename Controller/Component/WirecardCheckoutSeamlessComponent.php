@@ -7,6 +7,10 @@ use at\externet\WirecardCheckoutSeamless\Api;
 class WirecardCheckoutSeamlessComponent extends Component
 {
 
+    /** @var \Controller */
+    public $Controller;
+
+    /** @var Api\DataStorageInitRequest */
     public $dataStorageInitRequest;
 
     public function __construct($collection)

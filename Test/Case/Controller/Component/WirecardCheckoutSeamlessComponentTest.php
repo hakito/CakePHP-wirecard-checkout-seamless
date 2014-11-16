@@ -39,6 +39,12 @@ class WirecardCheckoutSeamlessComponentTest extends CakeTestCase
         Cache::clear();
     }
 
+    public function testStartup()
+    {
+        $this->t->startup($this->Controller);
+        $this->assertEquals($this->Controller, $this->t->Controller);
+    }
+
     public function testInitDataStorage()
     {
         $config = Configure::read('WirecardCheckoutSeamless');

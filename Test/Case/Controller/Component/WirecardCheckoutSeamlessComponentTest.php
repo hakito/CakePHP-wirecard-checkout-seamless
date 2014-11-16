@@ -1,8 +1,7 @@
 <?php
 
 App::uses('ComponentCollection', 'Controller');
-App::uses('WirecardCheckoutSeamlessComponent',
-        'WirecardCheckoutSeamlessComponent.Controller/Component');
+App::uses('WirecardCheckoutSeamlessComponent', 'WirecardCheckoutSeamless.Controller/Component');
 
 use at\externet\WirecardCheckoutSeamless\Api;
 
@@ -42,9 +41,10 @@ class WirecardCheckoutSeamlessComponentTest extends CakeTestCase
 
     public function testInitDataStorage()
     {
+        $config = Configure::read('WirecardCheckoutSeamless');
         $this->mDatastorageInitRequest->expects($this->once())
                 ->method('Send')
-                ->with(Configure::read('WirecardCheckoutSeamless')['secret']);
+                ->with($config['secret']);
         $this->t->InitDataStorage('a', 'b');
     }
 

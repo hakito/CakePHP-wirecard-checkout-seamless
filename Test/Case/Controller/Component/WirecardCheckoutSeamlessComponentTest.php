@@ -25,15 +25,15 @@ class WirecardCheckoutSeamlessComponentTest extends CakeTestCase
     {
         parent::setUp();        
 
-        $this->mDatastorageInitRequest =
-            $this->getMock(
-                'at\externet\WirecardCheckoutSeamless\Api\DatastorageInitRequest'
-        );
-
         $Collection = new ComponentCollection();
         $mockedController = $this->getMock('Controller', array('afterWirecardTransferNotification'));
         $this->Controller = $mockedController;
         $this->t = new WirecardCheckoutSeamlessComponent($Collection);
+        
+        $this->mDatastorageInitRequest =
+            $this->getMock(
+                'at\externet\WirecardCheckoutSeamless\Api\DatastorageInitRequest'
+        );
         $this->t->dataStorageInitRequest = $this->mDatastorageInitRequest;
 
         Cache::clear();

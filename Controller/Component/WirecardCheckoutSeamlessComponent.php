@@ -51,7 +51,10 @@ class WirecardCheckoutSeamlessComponent extends Component
         $response = $this->dataStorageInitRequest->Send($config['secret']);
         if ($response->GetErrors() > 0)
         {
-            $exception = new WirecardRequestException('Error during datastorage init.');
+            $errors = $response->GetErrorArray();
+            $message = 'Error during datastorage init';
+            $message .= isset($errors[1]) ? sprintf(' (%s).', $errors[1]->GetMessage()) : '.';
+            $exception = new WirecardRequestException($message);
             $exception->response = $response;
             throw $exception;
         }

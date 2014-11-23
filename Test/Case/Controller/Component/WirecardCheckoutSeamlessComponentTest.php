@@ -27,6 +27,9 @@ class WirecardCheckoutSeamlessComponentTest extends CakeTestCase
     {
         parent::setUp();
 
+        // reload config
+        require dirname(dirname(dirname(__DIR__))) . DS . 'Config.php';
+
         $Collection = new ComponentCollection();
         $mockedController = $this->getMock('Controller', array('afterWirecardTransferNotification', 'redirect'));
         $this->Controller = $mockedController;

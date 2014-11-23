@@ -31,7 +31,8 @@ class WirecardCheckoutSeamlessComponentTest extends CakeTestCase
         require dirname(dirname(dirname(__DIR__))) . DS . 'Config.php';
 
         $Collection = new ComponentCollection();
-        $mockedController = $this->getMock('Controller', array('afterWirecardTransferNotification', 'redirect'));
+        $mockedController = $this->getMock('Controller', array(
+            'afterWirecardTransferNotification', 'redirect', 'afterWirecardCheckoutSeamlessNotification'));
         $this->Controller = $mockedController;
         $mockRequest = $this->getMock('CakeRequest');
         $this->Controller->request = $mockRequest;
@@ -209,5 +210,33 @@ class WirecardCheckoutSeamlessComponentTest extends CakeTestCase
                 ->with('http://example.com');
 
         $this->t->PaymentRedirect(1, array());
+    }
+
+    public function testHandleConfirmationUrlInitFromPostData()
+    {
+        $post = array('foo' => 'bar');
+        $this->t->confirmationResponse = $this->getMock(
+            'at\externet\WirecardCheckoutSeamless\Api\ConfirmationResponse'
+        );
+        $this->t->confirmationResponse->expects($this->once())
+                ->method('InitFromArray')
+                ->with($post);
+        
+        $this->t->HandleConfirmationUrl(1, $post);
+    }
+
+    public function testHandleConfirmationUrlCallsCallback()
+    {
+        $this->t->confirmationResponse = $this->getMock(
+            'at\externet\WirecardCheckoutSeamless\Api\ConfirmationResponse'
+        );
+        $this->t->confirmationResponse->expects($this->once())
+                ->method('InitFromArray');
+
+        $this->Controller->expects($this->once())
+                ->method('afterWirecardCheckoutSeamlessNotification')
+                ->with('id', $this->t->confirmationResponse);
+        
+        $this->t->HandleConfirmationUrl('id', array());
     }
 }

@@ -16,11 +16,15 @@ class WirecardCheckoutSeamlessComponent extends Component
     /** @var Api\FrontendInitRequest */
     public $frontendInitRequest;
 
+    /** @var Api\ConfirmationResponse */
+    public $confirmationResponse;
+
     public function __construct($collection)
     {
         parent::__construct($collection);
         $this->dataStorageInitRequest = new Api\DataStorageInitRequest();
         $this->frontendInitRequest = new Api\FrontendInitRequest();
+        $this->confirmationResponse = new Api\ConfirmationResponse();
     }
 
     public function startup(\Controller $controller)
@@ -112,6 +116,23 @@ class WirecardCheckoutSeamlessComponent extends Component
         $response = $this->TrySend($this->frontendInitRequest, $config['secret']);
         
         $this->Controller->redirect($response->GetRedirectUrl());
+    }
+
+    /**
+     * Handler for confirmation URL
+     * @param string $id Identifier for callback
+     * @param array $post $_POST array expected
+     * @internal This is called by the controller of the plugin. You should not call this method manually.
+     */
+    public function HandleConfirmationUrl($id, $post)
+    {
+        $config = Configure::read('WirecardCheckoutSeamless');
+        $this->confirmationResponse->InitFromArray($post, $config['secret']);
+
+        $callback = isset($config['ConfirmationCallback']) ?
+                $config['ConfirmationCallback'] : 'afterWirecardCheckoutSeamlessNotification';
+
+        return call_user_func_array(array($this->Controller, $callback), array($id, $this->confirmationResponse));
     }
 
     /**

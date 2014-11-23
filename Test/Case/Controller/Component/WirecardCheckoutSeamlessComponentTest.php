@@ -17,14 +17,6 @@ class WirecardCheckoutSeamlessComponentTest extends CakeTestCase
 
     /** @var Api\DataStorageInitResponse */
     public $mDatastorageInitResponse;
-
-    public function __construct($name = NULL, array $data = array(), $dataName = '')
-    {
-        parent::__construct($name, $data, $dataName);
-
-        // dummy for buggy phpunit
-        $dummy = new Api\DatastorageInitResponse();
-    }
     
     /**
      * setUp method
@@ -43,10 +35,10 @@ class WirecardCheckoutSeamlessComponentTest extends CakeTestCase
         $this->t = new WirecardCheckoutSeamlessComponent($Collection);
 
         $this->mDatastorageInitRequest = $this->getMock(
-            'at\externet\WirecardCheckoutSeamless\Api\DatastorageInitRequest'
+            'at\externet\WirecardCheckoutSeamless\Api\DataStorageInitRequest'
         );
         $this->mDatastorageInitResponse = $this->getMock(
-            'at\externet\WirecardCheckoutSeamless\Api\DatastorageInitResponse'
+            'at\externet\WirecardCheckoutSeamless\Api\DataStorageInitResponse'
         );
 
         $this->t->dataStorageInitRequest = $this->mDatastorageInitRequest;

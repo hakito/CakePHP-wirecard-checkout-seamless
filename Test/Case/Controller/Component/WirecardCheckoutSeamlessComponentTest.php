@@ -121,7 +121,7 @@ class WirecardCheckoutSeamlessComponentTest extends CakeTestCase
                 ->with($config['secret'])
                 ->will($this->returnValue($mFrontendInitResponse));
 
-        $this->t->PaymentRedirect(array());
+        $this->t->PaymentRedirect(1, array());
     }
 
     public function testPaymentRedirectExceptionOnError()
@@ -145,7 +145,7 @@ class WirecardCheckoutSeamlessComponentTest extends CakeTestCase
                 ->will($this->returnValue($mFrontendInitResponse));
 
         $this->setExpectedException('WirecardRequestException');
-        $this->t->PaymentRedirect(array());
+        $this->t->PaymentRedirect(1, array());
     }
 
     public function testPaymentRedirectSetsDefaultParams()
@@ -181,7 +181,7 @@ class WirecardCheckoutSeamlessComponentTest extends CakeTestCase
                 ->method('SetConsumerUserAgent')
                 ->with('AgentSmith');
 
-        $this->t->PaymentRedirect(array());
+        $this->t->PaymentRedirect(1, array());
     }
 
     public function testPaymentRedirectRedirect()
@@ -205,6 +205,6 @@ class WirecardCheckoutSeamlessComponentTest extends CakeTestCase
                 ->method('redirect')
                 ->with('http://example.com');
 
-        $this->t->PaymentRedirect(array());
+        $this->t->PaymentRedirect(1, array());
     }
 }

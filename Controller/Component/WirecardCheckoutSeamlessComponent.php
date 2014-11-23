@@ -82,17 +82,20 @@ class WirecardCheckoutSeamlessComponent extends Component
      * <li>Internally generated (Arguments that are internally generated)</li>
      * </ol>
      *
+     * @param string $id Identifier that will be returned in your confirmation callback
      * @param array $params Array of required and optional parameters
      * @throws WirecardRequestException when the response contains errors.
      */
-    public function PaymentRedirect($params)
+    public function PaymentRedirect($id, $params)
     {
+        $config = Configure::read('WirecardCheckoutSeamless');
+
+        $encodedId = urlencode($id);
         $defaultParams = array(
-            'confirmUrl' => Router::url('/wirecard_checkout_seamless/process/', true),
+            'confirmUrl' => Router::url('/wirecard_checkout_seamless/process/' . $encodedId, true),
             'consumerIpAddress' => $this->Controller->request->clientIp(),
             'consumerUserAgent' => $this->Controller->request->header('User-Agent')
-        );
-        $config = Configure::read('WirecardCheckoutSeamless');
+        );        
         $combinedParams = array_merge($defaultParams, $config, $params);
         foreach ($combinedParams as $key => $val)
         {

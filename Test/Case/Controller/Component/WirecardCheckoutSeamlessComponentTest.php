@@ -28,8 +28,10 @@ class WirecardCheckoutSeamlessComponentTest extends CakeTestCase
         parent::setUp();
 
         $Collection = new ComponentCollection();
-        $mockedController = $this->getMock('Controller', array('afterWirecardTransferNotification'));
+        $mockedController = $this->getMock('Controller', array('afterWirecardTransferNotification', 'redirect'));
         $this->Controller = $mockedController;
+        $mockRequest = $this->getMock('CakeRequest');
+        $this->Controller->request = $mockRequest;
         $this->t = new WirecardCheckoutSeamlessComponent($Collection);
 
         $this->mDatastorageInitRequest = $this->getMock(
@@ -40,13 +42,14 @@ class WirecardCheckoutSeamlessComponentTest extends CakeTestCase
         );
 
         $this->t->dataStorageInitRequest = $this->mDatastorageInitRequest;
-
+        $this->t->startup($this->Controller);
         Cache::clear();
     }
 
     public function testStartup()
     {
-        $this->t->startup($this->Controller);
+        // FROM setUp
+        // $this->t->startup($this->Controller);
         $this->assertEquals($this->Controller, $this->t->Controller);
     }
 
@@ -102,4 +105,106 @@ class WirecardCheckoutSeamlessComponentTest extends CakeTestCase
         $this->t->InitDataStorage('a', 'b');
     }
 
+    public function testPaymentRedirectReturnsResponse()
+    {
+        $config = Configure::read('WirecardCheckoutSeamless');
+        $mFrontendInitRequest = $this->getMock(
+            'at\externet\WirecardCheckoutSeamless\Api\FrontendInitRequest'
+        );
+        $mFrontendInitResponse = $this->getMock(
+            'at\externet\WirecardCheckoutSeamless\Api\FrontendInitResponse'
+        );
+        $this->t->frontendInitRequest = $mFrontendInitRequest;
+
+        $mFrontendInitRequest->expects($this->once())
+                ->method('Send')
+                ->with($config['secret'])
+                ->will($this->returnValue($mFrontendInitResponse));
+
+        $this->t->PaymentRedirect(array());
+    }
+
+    public function testPaymentRedirectExceptionOnError()
+    {
+        $config = Configure::read('WirecardCheckoutSeamless');
+        $mFrontendInitRequest = $this->getMock(
+            'at\externet\WirecardCheckoutSeamless\Api\FrontendInitRequest'
+        );
+        $mFrontendInitResponse = $this->getMock(
+            'at\externet\WirecardCheckoutSeamless\Api\FrontendInitResponse'
+        );
+        $mFrontendInitResponse->expects($this->once())
+             ->method('GetErrors')
+             ->will($this->returnValue(1));
+
+        $this->t->frontendInitRequest = $mFrontendInitRequest;
+
+        $mFrontendInitRequest->expects($this->once())
+                ->method('Send')
+                ->with($config['secret'])
+                ->will($this->returnValue($mFrontendInitResponse));
+
+        $this->setExpectedException('WirecardRequestException');
+        $this->t->PaymentRedirect(array());
+    }
+
+    public function testPaymentRedirectSetsDefaultParams()
+    {
+        $mFrontendInitRequest = $this->getMock(
+            'at\externet\WirecardCheckoutSeamless\Api\FrontendInitRequest'
+        );
+        $mFrontendInitResponse = $this->getMock(
+            'at\externet\WirecardCheckoutSeamless\Api\FrontendInitResponse'
+        );
+        $this->t->frontendInitRequest = $mFrontendInitRequest;
+        $mFrontendInitRequest->expects($this->once())
+                ->method('Send')
+                ->will($this->returnValue($mFrontendInitResponse));
+
+        $this->Controller->request->expects($this->once())
+                ->method('clientIp')
+                ->will($this->returnValue('1.2.3.4'));
+
+        $this->Controller->request->staticExpects($this->once())
+                ->method('header')
+                ->with('User-Agent')
+                ->will($this->returnValue('AgentSmith'));
+
+        // Expected default params
+        $mFrontendInitRequest->expects($this->once())
+                ->method('SetConfirmUrl')
+                ->with($this->stringContains('http'));
+        $mFrontendInitRequest->expects($this->once())
+                ->method('SetConsumerIpAddress')
+                ->with('1.2.3.4');
+        $mFrontendInitRequest->expects($this->once())
+                ->method('SetConsumerUserAgent')
+                ->with('AgentSmith');
+
+        $this->t->PaymentRedirect(array());
+    }
+
+    public function testPaymentRedirectRedirect()
+    {
+        $mFrontendInitRequest = $this->getMock(
+            'at\externet\WirecardCheckoutSeamless\Api\FrontendInitRequest'
+        );
+        $mFrontendInitResponse = $this->getMock(
+            'at\externet\WirecardCheckoutSeamless\Api\FrontendInitResponse'
+        );
+        $mFrontendInitResponse->expects($this->once())
+                ->method('GetRedirectUrl')
+                ->will($this->returnValue('http://example.com'));
+
+        $this->t->frontendInitRequest = $mFrontendInitRequest;
+        $mFrontendInitRequest->expects($this->once())
+                ->method('Send')
+                ->will($this->returnValue($mFrontendInitResponse));
+
+        $this->Controller->expects($this->once())
+                ->method('redirect')
+                ->with('http://example.com');
+
+        $this->t->PaymentRedirect(array());
+    }
 }

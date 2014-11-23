@@ -16,9 +16,6 @@
         "hakito/wirecard-checkout-seamless": "dev-master",
         "composer/installers": "*"
     },
-    "require-dev": {
-        "phpunit/phpunit": ">=3.7.38"
-    },
     "extra": {
         "installer-name": "WirecardCheckoutSeamless"
     }

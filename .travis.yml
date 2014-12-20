@@ -14,7 +14,6 @@ env:
     - CAKE_VERSION=2.5
     - CAKE_VERSION=2.6
 before_script:
-  - rm webroot/CorsFallback.php
   - git clone https://github.com/hakito/travis.git --depth 1 ../travis
   - ../travis/before_script.sh
 script:

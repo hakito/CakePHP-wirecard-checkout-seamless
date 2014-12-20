@@ -34,6 +34,6 @@
       }
     </script>
   </head>
-  <body onload='setResponse("<?php echo h($response); ?>");'>
+  <body onload='setResponse("<?php echo addslashes($response); ?>");'>
   </body>
 </html>

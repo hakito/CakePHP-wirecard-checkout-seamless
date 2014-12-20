@@ -48,7 +48,7 @@ class WirecardCheckoutSeamlessComponent extends Component
         $this->dataStorageInitRequest->SetCustomerId($config['customerId']);
         $this->dataStorageInitRequest->SetOrderIdent($orderIdent);
         $this->dataStorageInitRequest->SetLanguage($language);
-        $this->dataStorageInitRequest->SetReturnUrl(Router::url('/eps_bank_transfer/CorsFallback.php', true));
+        $this->dataStorageInitRequest->SetReturnUrl(Router::url('/wirecard_checkout_seamless/CorsFallback', true));
         
         if (!empty($config['shopId']))
             $this->dataStorageInitRequest->SetShopId($config['shopId']);

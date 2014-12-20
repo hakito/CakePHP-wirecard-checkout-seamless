@@ -67,7 +67,7 @@ class WirecardCheckoutSeamlessComponentTest extends CakeTestCase
             'shopId' => 'b',
             'javascriptScriptVersion' => 'c',
             'orderIdent' => 'd',
-            'returnUrl' => 'http://localhost/eps_bank_transfer/CorsFallback.php',
+            'returnUrl' => 'http://localhost/wirecard_checkout_seamless/CorsFallback',
             'language' => 'f'
         );
 

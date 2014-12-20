@@ -14,4 +14,8 @@ class WirecardCheckoutSeamlessController extends AppController
         $this->autoRender = false;
     }
 
+    public function CorsFallback()
+    {
+        $this->layout = false;
+    }
 }

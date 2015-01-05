@@ -127,7 +127,7 @@ class WirecardCheckoutSeamlessComponent extends Component
     public function HandleConfirmationUrl($id, $post)
     {
         $config = Configure::read('WirecardCheckoutSeamless');
-        $this->confirmationResponse->InitFromArray($post, $config['secret']);
+        $this->confirmationResponse->InitFromArrayWithSecret($post, $config['secret']);
 
         $callback = isset($config['ConfirmationCallback']) ?
                 $config['ConfirmationCallback'] : 'afterWirecardCheckoutSeamlessNotification';

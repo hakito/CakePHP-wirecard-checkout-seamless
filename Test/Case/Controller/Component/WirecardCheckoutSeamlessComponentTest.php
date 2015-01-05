@@ -219,7 +219,7 @@ class WirecardCheckoutSeamlessComponentTest extends CakeTestCase
             'at\externet\WirecardCheckoutSeamless\Api\ConfirmationResponse'
         );
         $this->t->confirmationResponse->expects($this->once())
-                ->method('InitFromArray')
+                ->method('InitFromArrayWithSecret')
                 ->with($post);
         
         $this->t->HandleConfirmationUrl(1, $post);
@@ -231,7 +231,7 @@ class WirecardCheckoutSeamlessComponentTest extends CakeTestCase
             'at\externet\WirecardCheckoutSeamless\Api\ConfirmationResponse'
         );
         $this->t->confirmationResponse->expects($this->once())
-                ->method('InitFromArray');
+                ->method('InitFromArrayWithSecret');
 
         $this->Controller->expects($this->once())
                 ->method('afterWirecardCheckoutSeamlessNotification')

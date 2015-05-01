@@ -19,6 +19,10 @@
   //--------------------------------------------------------------------------------//
 
 	$response = isset($_POST['response']) ? $_POST['response'] : '';
+
+  // Workaround for demo mode which already quotes the response string
+    if (substr($response, 1, 1) != '\\')
+      $response = addslashes($response);
 ?>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
@@ -48,6 +52,6 @@
       }
     </script>
   </head>
-  <body onload='setResponse("<?php echo addslashes($response); ?>");'>
+  <body onload='setResponse("<?php echo $response; ?>");'>
   </body>
 </html>

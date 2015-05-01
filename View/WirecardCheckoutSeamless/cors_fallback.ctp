@@ -26,7 +26,21 @@
     <script type="text/javascript">
       function setResponse(response) {
         if (typeof parent.WirecardCEE_Fallback_Request_Object == 'object') {
-          parent.WirecardCEE_Fallback_Request_Object.setResponseText(response);
+          try {
+            parent.WirecardCEE_Fallback_Request_Object.setResponseText(response);
+          } catch (err)
+          {
+            var json = {
+              error: [
+                { errorCode: -1,
+                  message: "CORS fallback failed: " + err,
+                  consumerMessage: "An unexpected CORS error occurred."
+                }
+              ],
+              errors: 1
+            };
+            parent.WirecardCEE_Fallback_Request_Object.setResponseText(JSON.stringify(json));
+          }
         }
         else {
           console.log('Not a valid fallback call.');
